@@ -1,0 +1,9 @@
+{
+  "name": "หอไตรบาลี · เกมการเรียนรู้ภาษาบาลี บ21202",
+  "short_name": "หอไตรบาลี",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5fbff",
+  "theme_color": "#8fd3fe",
+  "icons": [{ "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
