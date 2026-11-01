@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600&amp;family=Sarabun:wght@400;600;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<link rel="preload" as="image" href="img/hero.webp?v=202610301909">
+<link rel="preload" as="image" href="img/hero.webp?v=202611010912">
 <style>/* หอไตรนามศัพท์ รุ่น 6 — ระบบหน้าตาชุดเดียวทั้งเกม
  * สี: ฟ้า (หลัก) · ชมพู (ปุ่มเล่น) · เหลือง (ดาว รางวัล)  ตัวอักษร: Mitr หัวข้อ · Sarabun เนื้อหา
  * ทุกหน้าของนักเรียนกว้างไม่เกิน 560px อยู่กลางจอ (มือถือเต็มจอ คอมพิวเตอร์ไม่กางเกิน) */
@@ -592,7 +592,7 @@ const API_URL = (() => {
   } catch (e) { }
   return API_DEFAULT;
 })();
-const VER = '202610301909';   // เลขรุ่น ใส่ตอนสร้างไฟล์ ใช้บังคับให้เครื่องนักเรียนโหลดภาพใหม่
+const VER = '202611010912';   // เลขรุ่น ใส่ตอนสร้างไฟล์ ใช้บังคับให้เครื่องนักเรียนโหลดภาพใหม่
 const CFG = { rpcTimeout: 30000, testTick: 1000 };
 
 /* แจ้งเมื่อสคริปต์พังระหว่างเปิด (นักเรียนแคปหน้าจอส่งครูได้) */
@@ -859,7 +859,7 @@ const face = (n, s) => `<img class="face" src="${IMG('f-' + n)}" width="${s}" he
 /** ท่าของสามเณรน้อยตามอารมณ์ */
 const NEN = { think: 'nen', happy: 'nen-wave', sad: 'nen-shy', read: 'nen-read', wai: 'nen-wai' };
 /** บอส: หน่วย ๑–๑๐ ยักษ์ · หน่วย ๑๑–๒๐ พญามารน้อย */
-const bossOf = u => u >= 11 ? { n: 'mara', win: 'mara-go', name: 'พญามารน้อย' } : { n: 'yak', win: 'yak', name: 'ยักษ์ลืมศัพท์' };
+const bossOf = u => u >= 11 ? { n: 'mara', win: 'mara-go', name: 'พญามารน้อย' } : { n: 'yak', win: 'yak-go', name: 'ยักษ์ลืมศัพท์' };
 
 /* ---------- ฉากหลังของแต่ละหน่วย (ภาพที่ไม่มีตัวละคร ตัวละครวางทับได้ไม่ซ้อน) ---------- */
 const SCENE_BG = [[/ระฆัง/, 'bg-bell'], [/หอไตร|ห้องสมุด|โรงเรียน|กุฏิ|ศาลา|เรือน/, 'bg-hall'], [/อุโบสถ|ประตู|โรงทาน/, 'bg-gate'],
@@ -871,7 +871,8 @@ const sceneOf = (u, night) => night ? (u >= 11 ? 'bg-moon' : 'bg-twilight')
 
 /* ---------- ผู้พิทักษ์ประจำชั้น: มีภาพ ๓ มิติ ใช้ภาพ · ไม่มี ใช้ตราวงกลมสีทองแบบเดียวกันทุกชั้น ---------- */
 const GUARD_IMG = [[/เอราวัณ/, 'erawan'], [/อัปสร|เทพธิดา|นางฟ้า/, 'apsara'], [/เทพบุตร|เทวดา/, 'thepbut'], [/ลิง|วานร/, 'monkey'], [/นกยูง/, 'peacock'], [/แมว/, 'cat'],
-  [/นาค/, 'naga'], [/สิงโต|ราชสีห์/, 'lion'], [/ช้าง/, 'elephant'], [/งู/, 'snake'], [/ม้า/, 'horse'], [/หมา|สุนัข/, 'dog'], [/ไก่/, 'fowl']];
+  [/ครุฑ/, 'garuda'], [/มังกร/, 'dragon'], [/นาค/, 'naga'], [/สิงโต|ราชสีห์|สิงห์/, 'lion'], [/ช้าง/, 'elephant'], [/งู/, 'snake'], [/ม้า/, 'horse'], [/หมา|สุนัข/, 'dog'], [/ไก่/, 'fowl'],
+  [/เสือ/, 'tiger'], [/โค|วัว|อุสภ/, 'cow'], [/กวาง|มิค/, 'deer'], [/จิ้งจก|ตุ๊กแก/, 'gecko'], [/ปลา/, 'carp']];
 function guardImg(u) { const x = unitOf(u); if (!x || !x.guard) return ''; const m = GUARD_IMG.find(([re]) => re.test(x.guard)); return m ? m[1] : ''; }
 function guardSeal(u, size) {
   const x = unitOf(u) || {}, ch = Array.from(String(x.guardPali || x.guard || thn(u)).replace(/[^ก-ฮ]/g, ''))[0] || thn(u);
@@ -1877,7 +1878,7 @@ async function enterAs(sid, r) {
 }
 /* โหลดภาพตัวละครและฉากไว้ล่วงหน้าตอนเครื่องว่าง เข้าด่านแล้วภาพขึ้นทันที */
 function warmImages() {
-  const go = () => ['c-nen', 'c-nen-wave', 'c-nen-shy', 'c-elder', 'c-yak', 'c-mara', ...SCENE_ROT, 'bg-twilight', 'bg-moon']
+  const go = () => ['c-nen', 'c-nen-jump', 'c-nen-shy', 'c-elder', 'c-yak', 'c-yak-go', ...SCENE_ROT, 'bg-twilight', 'bg-moon']
     .forEach((n, i) => setTimeout(() => { const im = new Image(); im.decoding = 'async'; im.src = IMG(n); }, i * 120));
   (window.requestIdleCallback || ((f) => setTimeout(f, 1500)))(go, { timeout: 4000 });
 }
@@ -1953,7 +1954,7 @@ function openHome() {
       <div class="w-face w-front"><span class="w-tag">${ui('sparkle', 14)} คำศัพท์วันนี้</span><b class="pali">${esc(wd.w)}</b><small>แตะเพื่อพลิกดูความหมาย</small></div>
       <div class="w-face w-back"><span class="w-tag">ชั้น ${thn(wd.u)}</span><b class="pali">${esc(wd.w)}</b><p>${esc(wd.th)}</p>${sayBtn(wd.w)}</div></div></div>` : ''}
     <div class="tools">
-      <button class="tool t-rev" id="t-review">${chr('yom', 56)}<div><b>ทบทวน ๓ นาที</b><span>คำที่ใกล้ลืม</span></div></button>
+      <button class="tool t-rev" id="t-review">${chr('nen-teach', 56)}<div><b>ทบทวน ๓ นาที</b><span>คำที่ใกล้ลืม</span></div></button>
       <button class="tool t-cert" id="t-certs">${chr('thepbut', 56)}<div><b>เกียรติบัตร</b><span>${thn(APP.certs.length)} ใบ</span></div></button>
     </div>
     <section class="tower">
@@ -2169,7 +2170,7 @@ function sceneHTML() {
   let right = '';
   if (R.boss) right = `<div class="boss-wrap" id="boss">${chr(B.n, 140, '', B.name)}<div class="hp">${Array.from({ length: R.n }, () => '<i></i>').join('')}</div></div>`;
   else if (R.code === 'ai') right = chr('boy', 140, 'mate', 'เด็กวัดถามเอไอ');
-  else if (isFree(R.step)) right = chr('yom', 140, 'mate');
+  else if (isFree(R.step)) right = chr('elder-go', 140, 'mate', 'พระอาจารย์');
   else { const g = guardImg(u); right = chr(g || (R.step[0] === 's' ? 'thepbut' : 'apsara'), 140, 'mate'); }
   const tip = (GAME_INFO[R.boss ? 'boss' : R.code] || {}).how || '';
   return `<div class="scene"><img class="bg" src="${IMG(sceneOf(u, R.boss))}" alt="">${chr('nen', 150, 'hero', 'สามเณรน้อย')}${right}
@@ -2276,7 +2277,7 @@ function markResult(it, good, key) {
   const k = key || it.key; if (k && /^(q|t|v):/.test(k)) (good ? R.hit : R.missed).push(k);
   good ? SFX.ok() : SFX.bad();
   const h = $('#play-stage .scene .hero');
-  if (h) { h.src = IMG('c-' + (good ? 'nen-wave' : 'nen-shy')); h.classList.remove('jump', 'shake'); void h.offsetWidth; h.classList.add(good ? 'jump' : 'shake'); }
+  if (h) { h.src = IMG('c-' + (good ? 'nen-jump' : 'nen-shy')); h.classList.remove('jump', 'shake'); void h.offsetWidth; h.classList.add(good ? 'jump' : 'shake'); }
   const b = $('#boss');
   if (b && good) { b.classList.remove('hurt'); void b.offsetWidth; b.classList.add('hurt'); const i = $$('.hp i', b)[R.c - 1]; if (i) i.classList.add('x'); }
   if (b && !good) { const im = $('img', b); if (im) im.src = IMG('c-' + bossOf(R.u).win); SFX.boss(); }
