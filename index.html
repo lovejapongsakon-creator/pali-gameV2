@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600&amp;family=Sarabun:wght@400;600;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<link rel="preload" as="image" href="img/hero.webp?v=202611010912">
+<link rel="preload" as="image" href="img/hero.webp?v=202611010930">
 <style>/* หอไตรนามศัพท์ รุ่น 6 — ระบบหน้าตาชุดเดียวทั้งเกม
  * สี: ฟ้า (หลัก) · ชมพู (ปุ่มเล่น) · เหลือง (ดาว รางวัล)  ตัวอักษร: Mitr หัวข้อ · Sarabun เนื้อหา
  * ทุกหน้าของนักเรียนกว้างไม่เกิน 560px อยู่กลางจอ (มือถือเต็มจอ คอมพิวเตอร์ไม่กางเกิน) */
@@ -592,7 +592,7 @@ const API_URL = (() => {
   } catch (e) { }
   return API_DEFAULT;
 })();
-const VER = '202611010912';   // เลขรุ่น ใส่ตอนสร้างไฟล์ ใช้บังคับให้เครื่องนักเรียนโหลดภาพใหม่
+const VER = '202611010930';   // เลขรุ่น ใส่ตอนสร้างไฟล์ ใช้บังคับให้เครื่องนักเรียนโหลดภาพใหม่
 const CFG = { rpcTimeout: 30000, testTick: 1000 };
 
 /* แจ้งเมื่อสคริปต์พังระหว่างเปิด (นักเรียนแคปหน้าจอส่งครูได้) */
@@ -1835,6 +1835,8 @@ async function doLogin() {
   if (!id) { loginFail('กรอกรหัสประจำตัวนักเรียนก่อนนะ'); $('#sid').focus(); return; }
   const btn = $('#btn-login'), label = btn.innerHTML;
   btn.disabled = true; btn.innerHTML = '<span class="spin" style="width:20px;height:20px;border-width:3px;margin:0"></span> กำลังเปิดประตู…';
+  // เน็ตช้า: บอกให้รอ ไม่ต้องกดซ้ำ (กดซ้ำยิ่งช้า)
+  const slow = setTimeout(() => { $('#lg-err').textContent = 'เพื่อน ๆ เข้าพร้อมกันหลายคน รอสักครู่ ไม่ต้องกดซ้ำนะ'; }, 7000);
   try {
     const r = await rpcRetry('login', [id, store('packVer') || ''], 2);
     if (r && r.reason === 'NOT_FOUND') {
@@ -1854,7 +1856,7 @@ async function doLogin() {
     SFX.pass();
     await enterAs(id, r);
   } catch (e) { loginFail('เชื่อมต่อไม่สำเร็จ ตรวจสัญญาณอินเทอร์เน็ต แล้วลองอีกครั้ง'); }
-  finally { btn.disabled = false; btn.innerHTML = label; }
+  finally { clearTimeout(slow); btn.disabled = false; btn.innerHTML = label; }
 }
 async function enterAs(sid, r) {
   APP.sid = sid; APP.me = r.student;
