@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600&amp;family=Sarabun:wght@400;600;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<link rel="preload" as="image" href="img/hero.webp?v=202611010930">
+<link rel="preload" as="image" href="img/hero.webp?v=202611010957">
 <style>/* หอไตรนามศัพท์ รุ่น 6 — ระบบหน้าตาชุดเดียวทั้งเกม
  * สี: ฟ้า (หลัก) · ชมพู (ปุ่มเล่น) · เหลือง (ดาว รางวัล)  ตัวอักษร: Mitr หัวข้อ · Sarabun เนื้อหา
  * ทุกหน้าของนักเรียนกว้างไม่เกิน 560px อยู่กลางจอ (มือถือเต็มจอ คอมพิวเตอร์ไม่กางเกิน) */
@@ -592,7 +592,7 @@ const API_URL = (() => {
   } catch (e) { }
   return API_DEFAULT;
 })();
-const VER = '202611010930';   // เลขรุ่น ใส่ตอนสร้างไฟล์ ใช้บังคับให้เครื่องนักเรียนโหลดภาพใหม่
+const VER = '202611010957';   // เลขรุ่น ใส่ตอนสร้างไฟล์ ใช้บังคับให้เครื่องนักเรียนโหลดภาพใหม่
 const CFG = { rpcTimeout: 30000, testTick: 1000 };
 
 /* แจ้งเมื่อสคริปต์พังระหว่างเปิด (นักเรียนแคปหน้าจอส่งครูได้) */
@@ -872,7 +872,8 @@ const sceneOf = (u, night) => night ? (u >= 11 ? 'bg-moon' : 'bg-twilight')
 /* ---------- ผู้พิทักษ์ประจำชั้น: มีภาพ ๓ มิติ ใช้ภาพ · ไม่มี ใช้ตราวงกลมสีทองแบบเดียวกันทุกชั้น ---------- */
 const GUARD_IMG = [[/เอราวัณ/, 'erawan'], [/อัปสร|เทพธิดา|นางฟ้า/, 'apsara'], [/เทพบุตร|เทวดา/, 'thepbut'], [/ลิง|วานร/, 'monkey'], [/นกยูง/, 'peacock'], [/แมว/, 'cat'],
   [/ครุฑ/, 'garuda'], [/มังกร/, 'dragon'], [/นาค/, 'naga'], [/สิงโต|ราชสีห์|สิงห์/, 'lion'], [/ช้าง/, 'elephant'], [/งู/, 'snake'], [/ม้า/, 'horse'], [/หมา|สุนัข/, 'dog'], [/ไก่/, 'fowl'],
-  [/เสือ/, 'tiger'], [/โค|วัว|อุสภ/, 'cow'], [/กวาง|มิค/, 'deer'], [/จิ้งจก|ตุ๊กแก/, 'gecko'], [/ปลา/, 'carp']];
+  [/เสือ/, 'tiger'], [/โค|วัว|อุสภ/, 'cow'], [/กวาง|มิค/, 'deer'], [/จิ้งจก|ตุ๊กแก/, 'gecko'], [/ปลา/, 'carp'],
+  [/อาทิตย์|ตะวัน|สุริย/, 'sun'], [/ดาว|ดารา/, 'star'], [/บัว|ปทุม|กมล/, 'lotus'], [/หงส์/, 'swan'], [/กระต่าย/, 'rabbit'], [/เต่า/, 'turtle'], [/กระรอก/, 'squirrel'], [/แร้ง/, 'vulture']];
 function guardImg(u) { const x = unitOf(u); if (!x || !x.guard) return ''; const m = GUARD_IMG.find(([re]) => re.test(x.guard)); return m ? m[1] : ''; }
 function guardSeal(u, size) {
   const x = unitOf(u) || {}, ch = Array.from(String(x.guardPali || x.guard || thn(u)).replace(/[^ก-ฮ]/g, ''))[0] || thn(u);
